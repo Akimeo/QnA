@@ -17,24 +17,34 @@ describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    let(:post_create) { post :create, params: { question_id: question, answer: answer_params } }
+
     context 'with valid attributes' do
+      let(:answer_params) { attributes_for(:answer) }
+
+      it 'bonds a new answer with the question' do
+        expect { post_create }.to change(question.answers, :count).by(1)
+      end
+
       it 'saves a new answer in the database' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer) } }.to change(Answer, :count).by(1)
+        expect { post_create }.to change(Answer, :count).by(1)
       end
 
       it 'redirects to show view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer) }
+        post_create
         expect(response).to redirect_to assigns(:answer)
       end
     end
 
     context 'with invalid attributes' do
+      let(:answer_params) { attributes_for(:answer, :invalid) }
+
       it 'does not save the answer' do
-        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) } }.to_not change(Answer, :count)
+        expect { post_create }.to_not change(Answer, :count)
       end
 
       it 're-renders new view' do
-        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid) }
+        post_create
         expect(response).to render_template :new
       end
     end
