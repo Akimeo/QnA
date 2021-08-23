@@ -1,5 +1,6 @@
 describe QuestionsController, type: :controller do
   let(:question) { create(:question) }
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
@@ -23,6 +24,8 @@ describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { login(user) }
+
     it 'renders new view' do
       get :new
       expect(response).to render_template :new
@@ -31,6 +34,8 @@ describe QuestionsController, type: :controller do
 
   describe 'POST #create' do
     let(:post_create) { post :create, params: { question: question_params } }
+
+    before { login(user) }
 
     context 'with valid attributes' do
       let(:question_params) { attributes_for(:question) }
