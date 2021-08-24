@@ -1,13 +1,14 @@
 FactoryBot.define do
   sequence :title do |n|
-    "Test #{n} Title"
+    "Question #{n} Title"
   end
 
   sequence :body do |n|
-    "Test #{n} Body"
+    "Question #{n} Body"
   end
 
   factory :question do
+    association :author, factory: :user
     title
     body
 

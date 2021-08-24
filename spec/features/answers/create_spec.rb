@@ -1,8 +1,9 @@
-feature 'User can answer the question on the question page', %q{
+feature 'User can create answer', %q{
   In order to answer the question
   As an authenticated user who visits the question page
   I'd like to be able to post an answer
 } do
+
   given(:user) { create(:user) }
   given(:question) { create(:question) }
 
@@ -15,11 +16,11 @@ feature 'User can answer the question on the question page', %q{
     end
 
     scenario 'posts an answer' do
-      fill_in 'Body', with: 'Test answer body'
+      fill_in 'Body', with: 'Testing answer creation'
       click_on 'Answer'
 
-      expect(page).to have_content 'Your answer successfully posted.'
-      expect(page).to have_content 'Test answer body'
+      expect(page).to have_content 'Your answer was successfully posted.'
+      expect(page).to have_content 'Testing answer creation'
     end
 
     scenario 'posts an answer with errors' do
@@ -31,8 +32,7 @@ feature 'User can answer the question on the question page', %q{
 
   scenario 'Unauthenticated user tries to post an answer' do
     visit question_path(question)
-
-    fill_in 'Body', with: 'Test answer body'
+    fill_in 'Body', with: "This shouldn't be posted"
     click_on 'Answer'
 
     expect(page).to have_content 'You need to sign in or sign up before continuing.'

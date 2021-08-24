@@ -2,13 +2,19 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    @answer = question.answers.new(answer_params)
+    @answer = current_user.answers.new(answer_params)
+    @answer.question = question
 
     if @answer.save
-      redirect_to @answer.question, notice: 'Your answer successfully posted.'
+      redirect_to @answer.question, notice: 'Your answer was successfully posted.'
     else
       render 'questions/show'
     end
+  end
+
+  def destroy
+    answer.destroy
+    redirect_to question_path(answer.question)
   end
 
   private
@@ -18,7 +24,7 @@ class AnswersController < ApplicationController
   end
 
   def answer
-    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
+    @answer ||= Answer.find(params[:id])
   end
 
   helper_method :question, :answer

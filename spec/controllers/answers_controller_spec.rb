@@ -11,6 +11,10 @@ describe AnswersController, type: :controller do
     context 'with valid attributes' do
       let(:answer_params) { attributes_for(:answer) }
 
+      it 'bonds a new answer with the author' do
+        expect { post_create }.to change(user.answers, :count).by(1)
+      end
+
       it 'bonds a new answer with the question' do
         expect { post_create }.to change(question.answers, :count).by(1)
       end
@@ -32,10 +36,25 @@ describe AnswersController, type: :controller do
         expect { post_create }.to_not change(Answer, :count)
       end
 
-      it 're-renders new view' do
+      it 're-renders question show view' do
         post_create
         expect(response).to render_template 'questions/show'
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let!(:answer) { create(:answer) }
+
+    before { login(user) }
+
+    it 'deletes the answer' do
+      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirects to question' do
+      delete :destroy, params: { id: answer }
+      expect(response).to redirect_to question_path(answer.question)
     end
   end
 end

@@ -40,6 +40,10 @@ describe QuestionsController, type: :controller do
     context 'with valid attributes' do
       let(:question_params) { attributes_for(:question) }
 
+      it 'bonds a new question with the author' do
+        expect { post_create }.to change(user.questions, :count).by(1)
+      end
+
       it 'saves a new question in the database' do
         expect { post_create }.to change(Question, :count).by(1)
       end
@@ -61,6 +65,21 @@ describe QuestionsController, type: :controller do
         post_create
         expect(response).to render_template :new
       end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let!(:question) { create(:question) }
+
+    before { login(user) }
+
+    it 'deletes the question' do
+      expect { delete :destroy, params: { id: question } }.to change(Question, :count).by(-1)
+    end
+
+    it 'redirects to index' do
+      delete :destroy, params: { id: question }
+      expect(response).to redirect_to questions_path
     end
   end
 end
