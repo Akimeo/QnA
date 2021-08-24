@@ -1,23 +1,12 @@
 describe AnswersController, type: :controller do
   let(:question) { create(:question) }
   let(:answer) { create(:answer) }
-
-  describe 'GET #show' do
-    it 'renders show view' do
-      get :show, params: { id: answer }
-      expect(response).to render_template :show
-    end
-  end
-
-  describe 'GET #new' do
-    it 'renders new view' do
-      get :new, params: { question_id: question }
-      expect(response).to render_template :new
-    end
-  end
+  let(:user) { create(:user) }
 
   describe 'POST #create' do
     let(:post_create) { post :create, params: { question_id: question, answer: answer_params } }
+
+    before { login(user) }
 
     context 'with valid attributes' do
       let(:answer_params) { attributes_for(:answer) }
@@ -30,9 +19,9 @@ describe AnswersController, type: :controller do
         expect { post_create }.to change(Answer, :count).by(1)
       end
 
-      it 'redirects to show view' do
+      it 'redirects to question show view' do
         post_create
-        expect(response).to redirect_to assigns(:answer)
+        expect(response).to redirect_to assigns(:question)
       end
     end
 
@@ -45,7 +34,7 @@ describe AnswersController, type: :controller do
 
       it 're-renders new view' do
         post_create
-        expect(response).to render_template :new
+        expect(response).to render_template 'questions/show'
       end
     end
   end
