@@ -4,8 +4,9 @@ feature 'User can view question list', %q{
   I'd like to be able to view the list of questions
 } do
 
+  let!(:questions) { create_list(:question, 3) }
+
   scenario 'User tries to view the list of questions' do
-    questions = create_list(:question, 3)
     visit questions_path
 
     questions.each do |question|

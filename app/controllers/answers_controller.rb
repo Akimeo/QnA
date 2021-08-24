@@ -13,7 +13,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    answer.destroy
+    if current_user.author_of?(answer)
+      answer.destroy
+      flash[:notice] = 'Your answer was successfully deleted.'
+    else
+      flash[:alert] = 'You must be the author to delete the answer.'
+    end
+
     redirect_to question_path(answer.question)
   end
 

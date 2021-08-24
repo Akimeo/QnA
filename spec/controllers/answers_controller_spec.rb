@@ -44,17 +44,34 @@ describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:answer) { create(:answer) }
+    let(:delete_destroy) { delete :destroy, params: { id: answer } }
 
     before { login(user) }
 
-    it 'deletes the answer' do
-      expect { delete :destroy, params: { id: answer } }.to change(Answer, :count).by(-1)
+    context 'user is the author' do
+      let!(:answer) { create(:answer, author: user) }
+
+      it 'deletes the answer' do
+        expect { delete_destroy }.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to question' do
+        delete_destroy
+        expect(response).to redirect_to question_path(answer.question)
+      end
     end
 
-    it 'redirects to question' do
-      delete :destroy, params: { id: answer }
-      expect(response).to redirect_to question_path(answer.question)
+    context 'user is not the author' do
+      let!(:answer) { create(:answer) }
+
+      it 'does not delete the answer' do
+        expect { delete_destroy }.not_to change(Answer, :count)
+      end
+
+      it 'redirects to question' do
+        delete_destroy
+        expect(response).to redirect_to question_path(answer.question)
+      end
     end
   end
 end
