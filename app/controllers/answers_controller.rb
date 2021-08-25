@@ -1,18 +1,26 @@
 class AnswersController < ApplicationController
-  def show
-  end
-
-  def new
-  end
+  before_action :authenticate_user!
 
   def create
-    @answer = question.answers.new(answer_params)
+    @answer = current_user.answers.new(answer_params)
+    @answer.question = question
 
     if @answer.save
-      redirect_to @answer
+      redirect_to @answer.question, notice: 'Your answer was successfully posted.'
     else
-      render :new
+      render 'questions/show'
     end
+  end
+
+  def destroy
+    if current_user.author_of?(answer)
+      answer.destroy
+      flash[:notice] = 'Your answer was successfully deleted.'
+    else
+      flash[:alert] = 'You must be the author to delete the answer.'
+    end
+
+    redirect_to question_path(answer.question)
   end
 
   private
@@ -22,7 +30,7 @@ class AnswersController < ApplicationController
   end
 
   def answer
-    @answer ||= params[:id] ? Answer.find(params[:id]) : Answer.new
+    @answer ||= Answer.find(params[:id])
   end
 
   helper_method :question, :answer

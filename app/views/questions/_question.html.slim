@@ -1,0 +1,4 @@
+p= link_to question.title, question_path(question)
+p= question.body
+- if current_user&.author_of?(question)
+  p= button_to 'Delete', question, method: :delete, data: { confirm: 'Are you sure?' }

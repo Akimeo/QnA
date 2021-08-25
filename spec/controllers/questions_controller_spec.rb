@@ -1,5 +1,6 @@
 describe QuestionsController, type: :controller do
   let(:question) { create(:question) }
+  let(:user) { create(:user) }
 
   describe 'GET #index' do
     let(:questions) { create_list(:question, 3) }
@@ -23,6 +24,8 @@ describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { login(user) }
+
     it 'renders new view' do
       get :new
       expect(response).to render_template :new
@@ -32,8 +35,14 @@ describe QuestionsController, type: :controller do
   describe 'POST #create' do
     let(:post_create) { post :create, params: { question: question_params } }
 
+    before { login(user) }
+
     context 'with valid attributes' do
       let(:question_params) { attributes_for(:question) }
+
+      it 'bonds a new question with the author' do
+        expect { post_create }.to change(user.questions, :count).by(1)
+      end
 
       it 'saves a new question in the database' do
         expect { post_create }.to change(Question, :count).by(1)
@@ -55,6 +64,38 @@ describe QuestionsController, type: :controller do
       it 're-renders new view' do
         post_create
         expect(response).to render_template :new
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    let(:delete_destroy) { delete :destroy, params: { id: question } }
+
+    before { login(user) }
+
+    context 'current user is the author' do
+      let!(:question) { create(:question, author: user) }
+
+      it 'deletes the question' do
+        expect { delete_destroy }.to change(Question, :count).by(-1)
+      end
+
+      it 'redirects to index' do
+        delete_destroy
+        expect(response).to redirect_to questions_path
+      end
+    end
+
+    context 'current_user is not the author' do
+      let!(:question) { create(:question) }
+
+      it 'does not delete the question' do
+        expect { delete_destroy }.not_to change(Question, :count)
+      end
+
+      it 'redirects to index' do
+        delete_destroy
+        expect(response).to redirect_to questions_path
       end
     end
   end
