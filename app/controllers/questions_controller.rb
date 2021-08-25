@@ -39,7 +39,7 @@ class QuestionsController < ApplicationController
   end
 
   def answer
-    @answer ||= question.answers.new
+    @answer ||= Answer.new
   end
 
   helper_method :question, :answer
