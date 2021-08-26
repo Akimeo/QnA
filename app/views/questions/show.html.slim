@@ -1,11 +1,18 @@
-h1= question.title
-p= question.body
+.question
+  h1= question.title
+  p= question.body
 
-= render question.answers
+.answers
+  = render question.answers
 
-= form_with model: [question, answer], local: true do |f|
-  = render 'shared/errors', resource: answer
+- if user_signed_in?
+  .new-answer
+    .new-answer-errors
+      = render 'shared/errors', resource: answer
 
-  = f.label :body
-  = f.text_area :body
-  = f.submit 'Answer'
+    = form_with model: [question, answer], local: false do |f|
+      = f.label :body
+      = f.text_area :body
+      = f.submit 'Answer'
+- else
+  p Sign in to answer questions

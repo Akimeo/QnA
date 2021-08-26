@@ -9,25 +9,25 @@ feature 'Author can delete answer', %q{
   given(:question) { create(:question) }
   given!(:answer) { create(:answer, author: author, question: question) }
 
-  scenario 'Author deletes their answer' do
+  scenario 'Author deletes their answer', js: true do
     sign_in(author)
     visit question_path(question)
     click_on 'Delete'
 
-    expect(page).to have_content 'Your answer was successfully deleted.'
-    expect(page).not_to have_content answer.body
+    expect(current_path).to eq question_path(question)
+    expect(page).to_not have_content answer.body
   end
 
   scenario "Authenticated user tries to delete someone else's answer" do
     sign_in(some_user)
     visit question_path(question)
 
-    expect(page).not_to have_content 'Delete'
+    expect(page).to_not have_content 'Delete'
   end
 
-  scenario "Unauthenticated user tries to delete an answer" do
+  scenario 'Unauthenticated user tries to delete an answer' do
     visit question_path(question)
 
-    expect(page).not_to have_content 'Delete'
+    expect(page).to_not have_content 'Delete'
   end
 end

@@ -4,8 +4,8 @@ feature 'User can view question', %q{
   I'd like to be able to view the question and it's answers
 } do
 
-  let(:question) { create(:question) }
-  let!(:answers) { create_list(:answer, 3, question: question) }
+  given(:question) { create(:question) }
+  given!(:answers) { create_list(:answer, 3, question: question) }
 
   scenario 'User tries to view the question page' do
     visit question_path(question)

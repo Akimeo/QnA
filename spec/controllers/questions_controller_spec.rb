@@ -68,6 +68,67 @@ describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    let(:patch_update) { patch :update, params: { id: question, question: question_params }, format: :js }
+
+    before { login(user) }
+
+    context 'with valid attributes' do
+      let!(:question) { create(:question, author: user) }
+      let(:question_params) { { title: 'new title', body: 'new body' } }
+
+      it 'changes question attributes' do
+        patch_update
+        question.reload
+
+        expect(question.title).to eq 'new title'
+        expect(question.body).to eq 'new body'
+      end
+
+      it 'renders update view' do
+        patch_update
+
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'with invalid attributes' do
+      let!(:question) { create(:question, author: user, title: 'some title') }
+      let(:question_params) { attributes_for(:question, :invalid) }
+
+      it 'does not change question attributes' do
+        patch_update
+        question.reload
+
+        expect(question.title).to eq 'some title'
+      end
+
+      it 'renders update view' do
+        patch_update
+
+        expect(response).to render_template :update
+      end
+    end
+
+    context 'user is not the author' do
+      let!(:question) { create(:question) }
+      let(:question_params) { { body: 'new body' } }
+
+      it 'does not change question attributes' do
+        patch_update
+        question.reload
+
+        expect(question.body).to_not eq 'new body'
+      end
+
+      it 'renders update view' do
+         patch_update
+
+         expect(response).to render_template :update
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     let(:delete_destroy) { delete :destroy, params: { id: question } }
 
@@ -90,7 +151,7 @@ describe QuestionsController, type: :controller do
       let!(:question) { create(:question) }
 
       it 'does not delete the question' do
-        expect { delete_destroy }.not_to change(Question, :count)
+        expect { delete_destroy }.to_not change(Question, :count)
       end
 
       it 'redirects to index' do

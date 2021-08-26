@@ -14,19 +14,19 @@ feature 'Author can delete question', %q{
     click_on 'Delete'
 
     expect(page).to have_content 'Your question was successfully deleted.'
-    expect(page).not_to have_content question.title
+    expect(page).to_not have_content question.title
   end
 
   scenario "Authenticated user tries to delete someone else's question" do
     sign_in(some_user)
     visit questions_path
 
-    expect(page).not_to have_content 'Delete'
+    expect(page).to_not have_content 'Delete'
   end
 
   scenario "Unauthenticated user tries to delete an question" do
     visit questions_path
 
-    expect(page).not_to have_content 'Delete'
+    expect(page).to_not have_content 'Delete'
   end
 end
