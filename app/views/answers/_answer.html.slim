@@ -1,4 +1,7 @@
-div id="answer-#{answer.id}"
+.answer id="answer-#{answer.id}"
+  = tag.div class: 'answer-best', id: "answer-best-#{answer.id}", data: { answer_id: answer.id }, hidden: !answer.best?
+    b The best answer!
+
   div id="answer-text-#{answer.id}"
     p= answer.body
 
@@ -14,3 +17,5 @@ div id="answer-#{answer.id}"
     - if current_user&.author_of?(answer)
       = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
       = link_to 'Delete', answer_path(answer), method: :delete, remote: true
+    - if current_user&.author_of?(answer.question)
+      = link_to 'Mark as best', choose_best_answer_question_path(answer.question, answer_id: answer), method: :patch, remote: true

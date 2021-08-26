@@ -160,4 +160,46 @@ describe QuestionsController, type: :controller do
       end
     end
   end
+
+  describe 'PATCH #choose_best_answer' do
+    let(:patch_choose_best_answer) { patch :choose_best_answer, params: { id: question, answer_id: answer }, format: :js }
+
+    let(:answer) { create(:answer, question: question) }
+
+    before { login(user) }
+
+    context 'user is the author' do
+      let(:question) { create(:question, author: user) }
+
+      it "changes questions's best answer" do
+        patch_choose_best_answer
+        question.reload
+
+        expect(question.best_answer).to eq answer
+      end
+
+      it "renders choose best answer view" do
+        patch_choose_best_answer
+
+        expect(response).to render_template :choose_best_answer
+      end
+    end
+
+    context 'user is not the author' do
+      let(:question) { create(:question) }
+
+      it "does not change questions's best answer" do
+        patch_choose_best_answer
+        question.reload
+
+        expect(question.best_answer).to eq nil
+      end
+
+      it "renders choose best answer view" do
+        patch_choose_best_answer
+
+        expect(response).to render_template :choose_best_answer
+      end
+    end
+  end
 end

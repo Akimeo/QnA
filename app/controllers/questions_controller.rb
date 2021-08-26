@@ -38,6 +38,13 @@ class QuestionsController < ApplicationController
     redirect_to questions_path
   end
 
+  def choose_best_answer
+    if current_user.author_of?(question)
+      @previous_best_answer = question.best_answer
+      question.update(best_answer: Answer.find(params[:answer_id]))
+    end
+  end
+
   private
 
   def question

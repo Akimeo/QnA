@@ -5,4 +5,7 @@ $(document).on('turbolinks:load', function(){
     $('#answer-text-' + answerId).hide()
     $('form#edit-answer-' + answerId).show()
   })
+
+  const bestAnswerId = $('.answer-best:visible').data('answerId')
+  $('#answer-' + bestAnswerId).prependTo('.answers')
 })
