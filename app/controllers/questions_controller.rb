@@ -21,6 +21,12 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update
+    if current_user.author_of?(question)
+      question.update(question_params)
+    end
+  end
+
   def destroy
     if current_user.author_of?(question)
       question.destroy
@@ -32,6 +38,13 @@ class QuestionsController < ApplicationController
     redirect_to questions_path
   end
 
+  def choose_best_answer
+    if current_user.author_of?(question)
+      @previous_best_answer = question.best_answer
+      question.update(best_answer: answer)
+    end
+  end
+
   private
 
   def question
@@ -39,7 +52,7 @@ class QuestionsController < ApplicationController
   end
 
   def answer
-    @answer ||= Answer.new
+    @answer ||= params[:answer_id] ? Answer.find(params[:answer_id]) : Answer.new
   end
 
   helper_method :question, :answer

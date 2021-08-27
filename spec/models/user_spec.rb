@@ -14,7 +14,7 @@ describe User, type: :model do
     context 'when user is not the author' do
       let(:question) { create(:question) }
 
-      it { is_expected.not_to be_author_of(question) }
+      it { is_expected.to_not be_author_of(question) }
     end
   end
 end

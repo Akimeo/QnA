@@ -1,3 +1,21 @@
-p= answer.body
-- if current_user&.author_of?(answer)
-  p= button_to 'Delete', answer, method: :delete, data: { confirm: 'Are you sure?' }
+.answer id="answer-#{answer.id}"
+  = tag.div class: 'answer-best', id: "answer-best-#{answer.id}", data: { answer_id: answer.id }, hidden: !answer.best?
+    b The best answer!
+
+  div id="answer-text-#{answer.id}"
+    p= answer.body
+
+  div id="edit-answer-#{answer.id}-errors"
+    = render 'shared/errors', resource: answer
+
+  = form_with model: answer, html: { hidden: true, id: "edit-answer-#{answer.id}" }, local: false do |f|
+    = f.label :body
+    = f.text_area :body
+    = f.submit 'Save'
+
+  .answer-actions
+    - if current_user&.author_of?(answer)
+      = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      = link_to 'Delete', answer_path(answer), method: :delete, remote: true
+    - if current_user&.author_of?(answer.question)
+      = link_to 'Mark as best', choose_best_answer_question_path(answer.question, answer_id: answer), method: :patch, remote: true
