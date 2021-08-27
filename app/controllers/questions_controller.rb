@@ -58,7 +58,7 @@ class QuestionsController < ApplicationController
   end
 
   def answer
-    @answer ||= params[:answer_id] ? Answer.find(params[:answer_id]) : Answer.new
+    @answer ||= params[:answer_id] ? Answer.with_attached_file.find(params[:answer_id]) : Answer.new
   end
 
   def file
