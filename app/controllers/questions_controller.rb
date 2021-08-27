@@ -41,7 +41,7 @@ class QuestionsController < ApplicationController
   def choose_best_answer
     if current_user.author_of?(question)
       @previous_best_answer = question.best_answer
-      question.update(best_answer: Answer.find(params[:answer_id]))
+      question.update(best_answer: answer)
     end
   end
 
@@ -52,7 +52,7 @@ class QuestionsController < ApplicationController
   end
 
   def answer
-    @answer ||= Answer.new
+    @answer ||= params[:answer_id] ? Answer.find(params[:answer_id]) : Answer.new
   end
 
   helper_method :question, :answer

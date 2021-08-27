@@ -26,6 +26,7 @@ describe Answer, type: :model do
     it 'sets question best_answer value to nil' do
       question.update(best_answer: answer)
       answer.destroy
+      question.reload
 
       expect(question.best_answer).to eq nil
     end
