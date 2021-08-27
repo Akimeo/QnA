@@ -134,7 +134,7 @@ describe QuestionsController, type: :controller do
 
     before { login(user) }
 
-    context 'current user is the author' do
+    context 'user is the author' do
       let!(:question) { create(:question, author: user) }
 
       it 'deletes the question' do
@@ -147,7 +147,7 @@ describe QuestionsController, type: :controller do
       end
     end
 
-    context 'current_user is not the author' do
+    context 'user is not the author' do
       let!(:question) { create(:question) }
 
       it 'does not delete the question' do
@@ -199,6 +199,40 @@ describe QuestionsController, type: :controller do
         patch_choose_best_answer
 
         expect(response).to render_template :choose_best_answer
+      end
+    end
+  end
+
+  describe 'DELETE #destroy_file' do
+    let(:delete_destroy_file) { delete :destroy_file, params: { id: question, file_id: question.files.first }, format: :js }
+
+    before do
+      login(user)
+
+      delete_destroy_file
+    end
+
+    context 'user is the author' do
+      let!(:question) { create(:question, author: user, files: [fixture_file_upload('spec/rails_helper.rb')]) }
+
+      it 'deletes the question file' do
+        expect(question.reload.files).to_not be_attached
+      end
+
+      it 'renders destroy file view' do
+        expect(response).to render_template :destroy_file
+      end
+    end
+
+    context 'user is not the author' do
+      let!(:question) { create(:question, files: [fixture_file_upload('spec/rails_helper.rb')]) }
+
+      it 'does not delete the question file' do
+        expect(question.reload.files).to be_attached
+      end
+
+      it 'renders destroy file view' do
+        expect(response).to render_template :destroy_file
       end
     end
   end

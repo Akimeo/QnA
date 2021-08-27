@@ -19,6 +19,12 @@ class AnswersController < ApplicationController
     end
   end
 
+  def destroy_file
+    if current_user.author_of?(answer)
+      file.purge
+    end
+  end
+
   private
 
   def question
@@ -29,7 +35,11 @@ class AnswersController < ApplicationController
     @answer ||= Answer.with_attached_files.find(params[:id])
   end
 
-  helper_method :question, :answer
+  def file
+    @file ||= ActiveStorage::Attachment.find(params[:file_id])
+  end
+
+  helper_method :question, :answer, :file
 
   def answer_params
     params.require(:answer).permit(:body, files: [])

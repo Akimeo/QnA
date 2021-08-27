@@ -132,4 +132,38 @@ describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy_file' do
+    let(:delete_destroy_file) { delete :destroy_file, params: { id: answer, file_id: answer.files.first }, format: :js }
+
+    before do
+      login(user)
+
+      delete_destroy_file
+    end
+
+    context 'user is the author' do
+      let!(:answer) { create(:answer, author: user, files: [fixture_file_upload('spec/rails_helper.rb')]) }
+
+      it 'deletes the answer file' do
+        expect(answer.reload.files).to_not be_attached
+      end
+
+      it 'renders destroy file view' do
+        expect(response).to render_template :destroy_file
+      end
+    end
+
+    context 'user is not the author' do
+      let!(:answer) { create(:answer, files: [fixture_file_upload('spec/rails_helper.rb')]) }
+
+      it 'does not delete the answer file' do
+        expect(answer.reload.files).to be_attached
+      end
+
+      it 'renders destroy file view' do
+        expect(response).to render_template :destroy_file
+      end
+    end
+  end
 end

@@ -3,9 +3,14 @@ div id="question-#{question.id}"
     h2= link_to question.title, question_path(question)
     p= question.body
 
-    - if question.files.attached?
-      - question.files.each do |file|
-        p= link_to file.filename.to_s, url_for(file)
+    .question-files
+      - if question.files.attached?
+        - question.files.each do |file|
+          div id="question-file-#{file.id}"
+            p= link_to file.filename.to_s, url_for(file)
+            - if current_user&.author_of?(question)
+              p= link_to 'Delete file', destroy_file_question_path(question, file_id: file.id), method: :delete, remote: true
+
 
   div id="edit-question-errors-#{question.id}"
     = render 'shared/errors', resource: question
