@@ -13,9 +13,13 @@
     = render 'shared/errors', resource: answer
 
   = form_with model: answer, html: { hidden: true, id: "edit-answer-#{answer.id}" }, local: false do |f|
-    = f.label :body
-    = f.text_area :body
-    = f.submit 'Save'
+    p
+      = f.label :body
+      = f.text_area :body
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true
+    p= f.submit 'Save'
 
   .answer-actions
     - if current_user&.author_of?(answer)
