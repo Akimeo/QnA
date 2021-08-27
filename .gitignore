@@ -38,3 +38,5 @@ yarn-debug.log*
 /config/database.yml
 .ides
 .DS_Store
+/config/gcskey.json
+*.env
