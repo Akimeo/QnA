@@ -38,12 +38,6 @@ class QuestionsController < ApplicationController
     redirect_to questions_path
   end
 
-  def destroy_file
-    if current_user.author_of?(question)
-      file.purge
-    end
-  end
-
   def choose_best_answer
     if current_user.author_of?(question)
       @previous_best_answer = question.best_answer
@@ -58,14 +52,10 @@ class QuestionsController < ApplicationController
   end
 
   def answer
-    @answer ||= params[:answer_id] ? Answer.with_attached_file.find(params[:answer_id]) : Answer.new
+    @answer ||= params[:answer_id] ? Answer.with_attached_files.find(params[:answer_id]) : Answer.new
   end
 
-  def file
-    @file ||= ActiveStorage::Attachment.find(params[:file_id])
-  end
-
-  helper_method :question, :answer, :file
+  helper_method :question, :answer
 
   def question_params
     params.require(:question).permit(:title, :body, files: [])

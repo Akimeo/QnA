@@ -3,14 +3,12 @@ Rails.application.routes.draw do
   root to: 'questions#index'
 
   resources :questions do
-    resources :answers, shallow: true, only: %i[create update destroy] do
-      member do
-        delete :destroy_file
-      end
-    end
+    resources :answers, shallow: true, only: %i[create update destroy]
+
     member do
       patch :choose_best_answer
-      delete :destroy_file
     end
   end
+
+  resources :attachments, only: :destroy
 end

@@ -8,10 +8,10 @@
     .answer-files
       - if answer.files.attached?
         - answer.files.each do |file|
-          div id="answer-file-#{file.id}"
+          div id="attachment-#{file.id}"
             p= link_to file.filename.to_s, url_for(file)
             - if current_user&.author_of?(answer)
-              p= link_to 'Delete file', destroy_file_answer_path(answer, file_id: file.id), method: :delete, remote: true
+              p= link_to 'Delete file', attachment_path(file), method: :delete, remote: true
 
 
   div id="edit-answer-#{answer.id}-errors"
