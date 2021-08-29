@@ -26,12 +26,12 @@ class AnswersController < ApplicationController
   end
 
   def answer
-    @answer ||= Answer.find(params[:id])
+    @answer ||= Answer.with_attached_files.find(params[:id])
   end
 
   helper_method :question, :answer
 
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, files: [])
   end
 end

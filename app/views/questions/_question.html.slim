@@ -3,15 +3,29 @@ div id="question-#{question.id}"
     h2= link_to question.title, question_path(question)
     p= question.body
 
+    .question-files
+      - if question.files.attached?
+        - question.files.each do |file|
+          div id="attachment-#{file.id}"
+            p= link_to file.filename.to_s, url_for(file)
+            - if current_user&.author_of?(question)
+              p= link_to 'Delete file', attachment_path(file), method: :delete, remote: true
+
+
   div id="edit-question-errors-#{question.id}"
     = render 'shared/errors', resource: question
 
   = form_with model: question, html: { hidden: true, id: "edit-question-#{question.id}" }, local: false do |f|
-    = f.label :title
-    = f.text_field :title
-    = f.label :body
-    = f.text_area :body
-    = f.submit 'Save'
+    p
+      = f.label :title
+      = f.text_field :title
+    p
+      = f.label :body
+      = f.text_area :body
+    p
+      = f.label :files
+      = f.file_field :files, multiple: true, direct_upload: true
+    p= f.submit 'Save'
 
   .question-actions
     - if current_user&.author_of?(question)

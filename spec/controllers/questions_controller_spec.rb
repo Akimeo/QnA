@@ -134,7 +134,7 @@ describe QuestionsController, type: :controller do
 
     before { login(user) }
 
-    context 'current user is the author' do
+    context 'user is the author' do
       let!(:question) { create(:question, author: user) }
 
       it 'deletes the question' do
@@ -147,7 +147,7 @@ describe QuestionsController, type: :controller do
       end
     end
 
-    context 'current_user is not the author' do
+    context 'user is not the author' do
       let!(:question) { create(:question) }
 
       it 'does not delete the question' do
