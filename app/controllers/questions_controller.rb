@@ -48,16 +48,28 @@ class QuestionsController < ApplicationController
   private
 
   def question
-    @question ||= params[:id] ? Question.with_attached_files.find(params[:id]) : Question.new
+    if params[:id]
+      @question ||= Question.with_attached_files.find(params[:id])
+    else
+      @question ||= Question.new
+      @question.links.build if @question.links.empty?
+      @question
+    end
   end
 
   def answer
-    @answer ||= params[:answer_id] ? Answer.with_attached_files.find(params[:answer_id]) : Answer.new
+    if params[:answer_id]
+      @answer ||= Answer.with_attached_files.find(params[:answer_id])
+    else
+      @answer ||= Answer.new
+      @answer.links.build if @answer.links.empty?
+      @answer
+    end
   end
 
   helper_method :question, :answer
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url])
   end
 end

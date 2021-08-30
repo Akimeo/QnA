@@ -13,6 +13,12 @@
             - if current_user&.author_of?(answer)
               p= link_to 'Delete file', attachment_path(file), method: :delete, remote: true
 
+    .links
+      p Links:
+      ul
+        - answer.links.each do |link|
+          li= link_to link.name, link.url
+
 
   div id="edit-answer-#{answer.id}-errors"
     = render 'shared/errors', resource: answer
