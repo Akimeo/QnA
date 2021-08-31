@@ -1,0 +1,23 @@
+.errors
+  = render 'shared/errors', resource: question
+
+= form_with model: question, local: local, html: local_assigns[:html] || {} do |f|
+  .field
+    = f.label :title
+    br
+    = f.text_field :title
+  .field
+    = f.label :body
+    br
+    = f.text_area :body
+  .field
+    = f.label :files
+    br
+    = f.file_field :files, multiple: true, direct_upload: true
+  h3 Links
+  #links
+    = f.fields_for :links do |link|
+      = render 'links/fields', f: link
+    .links
+      = link_to_add_association 'add link', f, :links, partial: 'links/fields'
+  = f.submit 'Ask'

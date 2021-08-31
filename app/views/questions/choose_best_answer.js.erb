@@ -1,6 +1,6 @@
 <% if @previous_best_answer.present? %>
-  $('#answer-best-<%= @previous_best_answer.id %>').hide()
+  $('#answer-<%= @previous_best_answer.id %> .best-answer').hide()
 <% end %>
 
-$('#answer-best-<%= question.best_answer.id %>').show()
+$('#answer-<%= question.best_answer.id %> .best-answer').show()
 $('#answer-<%= question.best_answer.id %>').prependTo('.answers')

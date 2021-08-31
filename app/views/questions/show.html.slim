@@ -1,41 +1,24 @@
-.question
-  h1= question.title
-  p= question.body
+h1= question.title
+p= question.body
 
-  - if question.files.attached?
+- if question.files.attached?
+  h3 Files
+  .files
     - question.files.each do |file|
-      p= link_to file.filename.to_s, url_for(file)
+      = link_to file.filename.to_s, url_for(file)
 
+- if question.links.any?
+  h3 Links
   .links
-    p Links:
-    ul
-      - question.links.each do |link|
-        li= link_to link.name, link.url
+    = render question.links
 
 .answers
+  h2 Answers
   = render question.answers
 
-- if user_signed_in?
-  .new-answer
-    .new-answer-errors
-      = render 'shared/errors', resource: answer
-
-    = form_with model: [question, answer], local: false do |f|
-      p
-        = f.label :body
-        = f.text_area :body
-      p
-        = f.label :files
-        = f.file_field :files, multiple: true, direct_upload: true
-      p Links:
-      p
-        = f.fields_for :links do |l|
-          p
-            = l.label :name, 'Link name'
-            = l.text_field :name
-          p
-            = l.label :url
-            = l.text_field :url
-      p= f.submit 'Answer'
-- else
-  p Sign in to answer questions
+.new-answer
+  h2 New answer
+  - if user_signed_in?
+    = render 'answers/form', answer: answer, model: [question, answer]
+  - else
+    p Sign in to answer questions

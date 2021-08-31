@@ -1,4 +1,4 @@
-$('#edit-question-errors-<%= question.id %>').html('<%= render 'shared/errors', resource: question %>')
+$('#question-<%= question.id %> .errors').html('<%= render 'shared/errors', resource: question %>')
 
 <% if !question.errors.present? %>
   $('#question-<%= question.id %>').replaceWith('<%= j render question %>')

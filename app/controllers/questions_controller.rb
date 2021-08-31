@@ -6,9 +6,11 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    answer.links.build
   end
 
   def new
+    question.links.build
   end
 
   def create
@@ -48,28 +50,16 @@ class QuestionsController < ApplicationController
   private
 
   def question
-    if params[:id]
-      @question ||= Question.with_attached_files.find(params[:id])
-    else
-      @question ||= Question.new
-      @question.links.build if @question.links.empty?
-      @question
-    end
+    @question ||= params[:id] ? Question.with_attached_files.find(params[:id]) : Question.new
   end
 
   def answer
-    if params[:answer_id]
-      @answer ||= Answer.with_attached_files.find(params[:answer_id])
-    else
-      @answer ||= Answer.new
-      @answer.links.build if @answer.links.empty?
-      @answer
-    end
+    @answer ||= params[:answer_id] ? Answer.with_attached_files.find(params[:answer_id]) : Answer.new
   end
 
   helper_method :question, :answer
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [], links_attributes: [:name, :url])
+    params.require(:question).permit(:title, :body, files: [], links_attributes: [:id, :name, :url, :_destroy])
   end
 end
