@@ -20,4 +20,13 @@
       = render 'links/fields', f: link
     .links
       = link_to_add_association 'add link', f, :links, partial: 'links/fields'
+  h3 Award
+  #award
+    = f.fields_for :award do |a|
+      .field
+        = a.label :title, 'Award Title'
+        = a.text_field :title
+      .field
+        = a.label :image
+        = a.file_field :image, direct_upload: true
   = f.submit 'Ask'

@@ -32,6 +32,7 @@ gem 'devise'
 gem 'google-cloud-storage', require: false
 gem 'cocoon'
 gem 'validate_url'
+gem 'active_storage_validations'
 
 
 group :development, :test do

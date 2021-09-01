@@ -12,6 +12,11 @@ p= question.body
   .links
     = render question.links
 
+- if question.award.present?
+  .award
+    h3= "Recieve #{question.award.title} award for the best answer!"
+    = image_tag question.award.image, size:"100x100"
+
 .answers
   h2 Answers
   = render question.answers
