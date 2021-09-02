@@ -30,6 +30,9 @@ gem 'bootsnap', '>= 1.4.4', require: false
 gem 'slim-rails'
 gem 'devise'
 gem 'google-cloud-storage', require: false
+gem 'cocoon'
+gem 'validate_url'
+gem 'active_storage_validations'
 
 
 group :development, :test do

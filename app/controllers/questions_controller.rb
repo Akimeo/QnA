@@ -6,9 +6,12 @@ class QuestionsController < ApplicationController
   end
 
   def show
+    answer.links.build
   end
 
   def new
+    question.links.build
+    question.build_award
   end
 
   def create
@@ -41,7 +44,10 @@ class QuestionsController < ApplicationController
   def choose_best_answer
     if current_user.author_of?(question)
       @previous_best_answer = question.best_answer
-      question.update(best_answer: answer)
+      question.transaction do
+        question.update!(best_answer: answer)
+        question.award&.update!(user: answer.author)
+      end
     end
   end
 
@@ -58,6 +64,6 @@ class QuestionsController < ApplicationController
   helper_method :question, :answer
 
   def question_params
-    params.require(:question).permit(:title, :body, files: [])
+    params.require(:question).permit(:title, :body, files: [], links_attributes: [:id, :name, :url, :_destroy], award_attributes: [:title, :image])
   end
 end

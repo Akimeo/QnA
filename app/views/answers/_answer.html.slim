@@ -1,34 +1,29 @@
 .answer id="answer-#{answer.id}"
-  = tag.div class: 'answer-best', id: "answer-best-#{answer.id}", data: { answer_id: answer.id }, hidden: !answer.best?
+  = tag.div class: 'best-answer', data: { answer_id: answer.id }, hidden: !answer.best?
     b The best answer!
 
-  div id="answer-text-#{answer.id}"
+  .content
     p= answer.body
 
-    .answer-files
-      - if answer.files.attached?
+    - if answer.files.attached?
+      h3 Files
+      .files
         - answer.files.each do |file|
           div id="attachment-#{file.id}"
-            p= link_to file.filename.to_s, url_for(file)
+            = link_to file.filename.to_s, url_for(file)
             - if current_user&.author_of?(answer)
-              p= link_to 'Delete file', attachment_path(file), method: :delete, remote: true
+              = link_to 'Delete file', attachment_path(file), method: :delete, remote: true
 
+    - if answer.links.any?
+      h3 Links:
+      .links
+        = render answer.links
 
-  div id="edit-answer-#{answer.id}-errors"
-    = render 'shared/errors', resource: answer
+  = render 'answers/form', answer: answer, model: answer, html: { hidden: true }
 
-  = form_with model: answer, html: { hidden: true, id: "edit-answer-#{answer.id}" }, local: false do |f|
-    p
-      = f.label :body
-      = f.text_area :body
-    p
-      = f.label :files
-      = f.file_field :files, multiple: true, direct_upload: true
-    p= f.submit 'Save'
-
-  .answer-actions
+  .actions
     - if current_user&.author_of?(answer)
-      = link_to 'Edit', '#', class: 'edit-answer-link', data: { answer_id: answer.id }
+      = link_to 'Edit', '#', class: 'edit-link', data: { answer_id: answer.id }
       = link_to 'Delete', answer_path(answer), method: :delete, remote: true
     - if current_user&.author_of?(answer.question)
       = link_to 'Mark as best', choose_best_answer_question_path(answer.question, answer_id: answer), method: :patch, remote: true

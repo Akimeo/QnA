@@ -17,17 +17,33 @@ describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
+    before { get :show, params: { id: question } }
+
+    it 'builds answer links' do
+      expect(assigns(:answer).links.first).to be_a_new(Link)
+    end
+
     it 'renders show view' do
-      get :show, params: { id: question }
       expect(response).to render_template :show
     end
   end
 
   describe 'GET #new' do
-    before { login(user) }
+    before do
+      login(user)
+
+      get :new
+    end
+
+    it 'builds question links' do
+      expect(assigns(:question).links.first).to be_a_new(Link)
+    end
+
+    it 'builds question award' do
+      expect(assigns(:question).award).to be_a_new(Award)
+    end
 
     it 'renders new view' do
-      get :new
       expect(response).to render_template :new
     end
   end
@@ -164,18 +180,27 @@ describe QuestionsController, type: :controller do
   describe 'PATCH #choose_best_answer' do
     let(:patch_choose_best_answer) { patch :choose_best_answer, params: { id: question, answer_id: answer }, format: :js }
 
-    let(:answer) { create(:answer, question: question) }
+    let(:answer_author) { create(:user) }
+    let(:answer) { create(:answer, question: question, author: answer_author) }
 
     before { login(user) }
 
     context 'user is the author' do
       let(:question) { create(:question, author: user) }
+      let!(:award) { create(:award, question: question) }
 
       it "changes questions's best answer" do
         patch_choose_best_answer
         question.reload
 
         expect(question.best_answer).to eq answer
+      end
+
+      it "changes question award's user" do
+        patch_choose_best_answer
+        award.reload
+
+        expect(award.user).to eq answer_author
       end
 
       it "renders choose best answer view" do

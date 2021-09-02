@@ -10,6 +10,7 @@ import "channels"
 import "jquery"
 import "solutions/answers"
 import "solutions/questions"
+import "@nathanvda/cocoon"
 
 Rails.start()
 Turbolinks.start()

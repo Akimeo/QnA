@@ -39,6 +39,8 @@ GEM
       erubi (~> 1.4)
       rails-dom-testing (~> 2.0)
       rails-html-sanitizer (~> 1.1, >= 1.2.0)
+    active_storage_validations (0.9.5)
+      rails (>= 5.2.0)
     activejob (6.1.4)
       activesupport (= 6.1.4)
       globalid (>= 0.3.6)
@@ -78,6 +80,7 @@ GEM
       regexp_parser (>= 1.5, < 3.0)
       xpath (~> 3.2)
     childprocess (3.0.0)
+    cocoon (1.2.15)
     concurrent-ruby (1.1.9)
     crass (1.0.6)
     declarative (0.0.20)
@@ -328,6 +331,9 @@ GEM
     tzinfo-data (1.2021.1)
       tzinfo (>= 1.0.0)
     uber (0.1.0)
+    validate_url (1.0.13)
+      activemodel (>= 3.0.0)
+      public_suffix
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (4.1.0)
@@ -362,9 +368,11 @@ PLATFORMS
   x86-mswin32
 
 DEPENDENCIES
+  active_storage_validations
   bootsnap (>= 1.4.4)
   byebug
   capybara (>= 3.26)
+  cocoon
   devise
   dotenv-rails
   factory_bot_rails
@@ -385,6 +393,7 @@ DEPENDENCIES
   spring
   turbolinks (~> 5)
   tzinfo-data
+  validate_url
   web-console (>= 4.1.0)
   webdrivers
   webpacker (~> 5.0)

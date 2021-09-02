@@ -1,11 +1,12 @@
 $(document).on('turbolinks:load', function(){
-  $('.answers').on('click', '.edit-answer-link', function(e) {
+  $('.answers').on('click', '.edit-link', function(e) {
     e.preventDefault()
     const answerId = $(this).data('answerId')
-    $('#answer-text-' + answerId).hide()
-    $('form#edit-answer-' + answerId).show()
+    $(`#answer-${answerId} .content`).hide()
+    $(`#answer-${answerId} form`).show()
+    $(`#answer-${answerId} input[type=submit]`).val('Save')
   })
 
-  const bestAnswerId = $('.answer-best:visible').data('answerId')
-  $('#answer-' + bestAnswerId).prependTo('.answers')
+  const bestAnswerId = $('.best-answer:visible').data('answerId')
+  $(`#answer-${bestAnswerId}`).prependTo('.answers')
 })
