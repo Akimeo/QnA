@@ -44,8 +44,10 @@ class QuestionsController < ApplicationController
   def choose_best_answer
     if current_user.author_of?(question)
       @previous_best_answer = question.best_answer
-      question.update(best_answer: answer)
-      question.award&.update(user: answer.author)
+      question.transaction do
+        question.update!(best_answer: answer)
+        question.award&.update!(user: answer.author)
+      end
     end
   end
 
