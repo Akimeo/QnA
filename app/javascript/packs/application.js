@@ -10,6 +10,7 @@ import "channels"
 import "jquery"
 import "solutions/answers"
 import "solutions/questions"
+import "solutions/votes"
 import "@nathanvda/cocoon"
 
 Rails.start()
