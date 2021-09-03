@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :vote do
     status { 1 }
-    user
+    association :author, factory: :user
     association :votable, factory: :question
 
     trait :invalid do

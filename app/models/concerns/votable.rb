@@ -10,6 +10,6 @@ module Votable
   end
 
   def vote_of(user)
-    votes.find_by(user: user)
+    votes.find_by(author: user)
   end
 end

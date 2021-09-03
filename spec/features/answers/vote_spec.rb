@@ -37,7 +37,7 @@ feature 'User can vote for answer', %q{
   end
 
   describe 'User who already voted', js: true do
-    given!(:vote) { create(:vote, user: user, votable: answer) }
+    given!(:vote) { create(:vote, author: user, votable: answer) }
 
     background do
       sign_in(user)

@@ -33,7 +33,7 @@ shared_examples_for 'votable' do
     let(:user) { create(:user) }
 
     context 'when user voted' do
-      let!(:vote) { create(:vote, votable: model, user: user) }
+      let!(:vote) { create(:vote, votable: model, author: user) }
 
       it { is_expected.to eq user.votes.first }
     end

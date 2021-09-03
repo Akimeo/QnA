@@ -5,9 +5,9 @@ class VotesController < ApplicationController
     @vote = current_user.votes.new(status: params[:status])
     @vote.votable = votable
 
-    return head :forbidden if current_user.author_of?(votable) || votable.vote_of(current_user)
-
-    if @vote.save
+    if current_user.author_of?(votable) || votable.vote_of(current_user)
+      head :forbidden
+    elsif @vote.save
       render json: { vote: @vote, rating: votable.rating }
     else
       render json: @vote.errors.full_messages, status: :unprocessable_entity
@@ -15,10 +15,12 @@ class VotesController < ApplicationController
   end
 
   def destroy
-    return head :forbidden if current_user != vote.user
-
-    vote.destroy
-    render json: { vote: vote, rating: vote.votable.rating }
+    if current_user.author_of?(vote)
+      vote.destroy
+      render json: { vote: vote, rating: vote.votable.rating }
+    else
+      head :forbidden
+    end
   end
 
   private

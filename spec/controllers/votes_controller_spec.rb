@@ -6,7 +6,7 @@ describe VotesController, type: :controller do
   before { login(user) }
 
   describe 'POST #create' do
-    let(:post_create) { post :create, params: { user: user, votable_type: 'Question', votable_id: question.id, status: vote_params }, format: :json }
+    let(:post_create) { post :create, params: { author: user, votable_type: 'Question', votable_id: question.id, status: vote_params }, format: :json }
 
     context 'with valid attributes' do
       let(:vote_params) { :upvote }
@@ -65,7 +65,7 @@ describe VotesController, type: :controller do
 
     context 'when user already voted' do
       let(:vote_params) { :upvote }
-      let!(:vote) { create(:vote, user: user, votable: question) }
+      let!(:vote) { create(:vote, author: user, votable: question) }
 
       it 'does not save the vote' do
         expect { post_create }.to_not change(Vote, :count)
@@ -83,7 +83,7 @@ describe VotesController, type: :controller do
     let(:delete_destroy) { delete :destroy, params: { id: vote }, format: :json }
 
     context 'user is the voter' do
-      let!(:vote) { create(:vote, user: user) }
+      let!(:vote) { create(:vote, author: user) }
 
       it 'deletes the vote' do
         expect { delete_destroy }.to change(Vote, :count).by(-1)
