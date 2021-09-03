@@ -1,21 +1,24 @@
-h1= question.title
-p= question.body
+.question
+  h1= question.title
+  p= question.body
 
-- if question.files.attached?
-  h3 Files
-  .files
-    - question.files.each do |file|
-      = link_to file.filename.to_s, url_for(file)
+  - if question.files.attached?
+    h3 Files
+    .files
+      - question.files.each do |file|
+        = link_to file.filename.to_s, url_for(file)
 
-- if question.links.any?
-  h3 Links
-  .links
-    = render question.links
+  - if question.links.any?
+    h3 Links
+    .links
+      = render question.links
 
-- if question.award.present?
-  .award
-    h3= "Recieve #{question.award.title} award for the best answer!"
-    = image_tag question.award.image, size:"100x100"
+  - if question.award.present?
+    .award
+      h3= "Recieve #{question.award.title} award for the best answer!"
+      = image_tag question.award.image, size:"100x100"
+
+  = render 'votes/voting', votable: question, vote: question.vote_of(current_user)
 
 .answers
   h2 Answers

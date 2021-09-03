@@ -19,6 +19,8 @@
       .links
         = render answer.links
 
+  = render 'votes/voting', votable: answer, vote: answer.vote_of(current_user)
+
   = render 'answers/form', answer: answer, model: answer, html: { hidden: true }
 
   .actions
