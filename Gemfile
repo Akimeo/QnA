@@ -33,6 +33,7 @@ gem 'google-cloud-storage', require: false
 gem 'cocoon'
 gem 'validate_url'
 gem 'active_storage_validations'
+gem 'gon'
 
 
 group :development, :test do

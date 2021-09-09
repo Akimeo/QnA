@@ -10,7 +10,7 @@ feature 'User can view question rating', %q{
   scenario 'User views the question rating' do
     visit question_path(question)
 
-    within '.question' do
+    within '.question-show' do
       expect(page).to have_content 'Rating: 3'
     end
   end

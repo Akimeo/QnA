@@ -1,4 +1,4 @@
-.question
+.question-show id="question-#{question.id}" data-question-id="#{question.id}"
   h1= question.title
   p= question.body
 
@@ -17,6 +17,16 @@
     .award
       h3= "Recieve #{question.award.title} award for the best answer!"
       = image_tag question.award.image, size:"100x100"
+
+  h3 Comments
+  .comments
+    = render question.comments
+  .new-comment
+    h3 New comment
+    - if user_signed_in?
+      = render 'comments/form', commentable: question
+    - else
+      p Sign in to comment questions
 
   = render 'votes/voting', votable: question, vote: question.vote_of(current_user)
 

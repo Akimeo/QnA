@@ -1,0 +1,37 @@
+.answer id="answer-#{answer.id}"
+  = tag.div class: 'best-answer', data: { answer_id: answer.id }, hidden: !answer.best?
+    b The best answer!
+
+  .content
+    p= answer.body
+
+    - if answer.files.attached?
+      h3 Files
+      .files
+        - answer.files.each do |file|
+          div id="attachment-#{file.id}"
+            = link_to file.filename.to_s, url_for(file)
+
+    - if answer.links.any?
+      h3 Links:
+      .links
+        - answer.links.each do |link|
+          div id="link-#{link.id}"
+            = link_to link.name, link.url, target: '_blank', rel: 'nofollow'
+
+    h3 Comments
+    .comments
+    .new-comment hidden="true"
+      h3 New comment
+      = render 'comments/form', commentable: answer
+
+  .voting
+    .rating
+      p= "Rating: #{answer.rating}"
+    .vote-links hidden="true"
+      = vote_link 'Upvote', :upvote, answer
+      br
+      = vote_link 'Downvote', :downvote, answer
+
+  .actions hidden="true"
+    = link_to 'Mark as best', choose_best_answer_question_path(answer.question, answer_id: answer), method: :patch, remote: true

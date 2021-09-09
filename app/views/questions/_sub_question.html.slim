@@ -1,0 +1,18 @@
+.question id="question-#{question.id}"
+  .content
+    h2= link_to question.title, question_path(question)
+    p= question.body
+
+    - if question.files.attached?
+      h3 Files
+      .files
+        - question.files.each do |file|
+          div id="attachment-#{file.id}"
+            = link_to file.filename.to_s, url_for(file)
+
+    - if question.links.any?
+      h3 Links
+      .links
+        - question.links.each do |link|
+          div id="link-#{link.id}"
+            = link_to link.name, link.url, target: '_blank', rel: 'nofollow'
