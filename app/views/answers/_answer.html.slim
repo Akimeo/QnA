@@ -11,7 +11,7 @@
         - answer.files.each do |file|
           div id="attachment-#{file.id}"
             = link_to file.filename.to_s, url_for(file)
-            - if current_user&.author_of?(answer)
+            - if can?(:destroy, file)
               = link_to 'Delete file', attachment_path(file), method: :delete, remote: true
 
     - if answer.links.any?
@@ -24,7 +24,7 @@
       = render answer.comments
     .new-comment
       h3 New comment
-      - if user_signed_in?
+      - if can?(:create, Comment)
         = render 'comments/form', commentable: answer
       - else
         p Sign in to comment answers
@@ -34,8 +34,9 @@
   = render 'answers/form', answer: answer, model: answer, html: { hidden: true }
 
   .actions
-    - if current_user&.author_of?(answer)
+    - if can?(:update, answer)
       = link_to 'Edit', '#', class: 'edit-link', data: { answer_id: answer.id }
+    - if can?(:destroy, answer)
       = link_to 'Delete', answer_path(answer), method: :delete, remote: true
-    - if current_user&.author_of?(answer.question)
+    - if can?(:choose_best_answer, answer.question)
       = link_to 'Mark as best', choose_best_answer_question_path(answer.question, answer_id: answer), method: :patch, remote: true
