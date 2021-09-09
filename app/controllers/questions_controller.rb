@@ -1,5 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
+  after_action :publish_question, only: :create
 
   def index
     @questions = Question.all
@@ -7,6 +8,7 @@ class QuestionsController < ApplicationController
 
   def show
     answer.links.build
+    gon.user_id = current_user&.id
   end
 
   def new
@@ -65,5 +67,17 @@ class QuestionsController < ApplicationController
 
   def question_params
     params.require(:question).permit(:title, :body, files: [], links_attributes: [:id, :name, :url, :_destroy], award_attributes: [:title, :image])
+  end
+
+  def publish_question
+    if question.persisted?
+      ActionCable.server.broadcast(
+        'questions',
+        ApplicationController.render(
+          partial: 'questions/sub_question',
+          locals: { question: question }
+        )
+      )
+    end
   end
 end

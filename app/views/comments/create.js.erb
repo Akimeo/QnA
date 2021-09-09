@@ -1,0 +1,6 @@
+$('#<%= comment.commentable_type.underscore %>-<%= @comment.commentable_id %> .new-comment .errors').html('<%= render 'shared/errors', resource: comment %>')
+
+<% if comment.persisted? %>
+  $("#<%= comment.commentable_type.underscore %>-<%= @comment.commentable_id %> .comments").append('<%= j render comment %>')
+  $("#<%= comment.commentable_type.underscore %>-<%= @comment.commentable_id %> .new-comment #comment_body").val('')
+<% end %>

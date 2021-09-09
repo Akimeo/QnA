@@ -15,9 +15,19 @@
               = link_to 'Delete file', attachment_path(file), method: :delete, remote: true
 
     - if answer.links.any?
-      h3 Links:
+      h3 Links
       .links
         = render answer.links
+
+    h3 Comments
+    .comments
+      = render answer.comments
+    .new-comment
+      h3 New comment
+      - if user_signed_in?
+        = render 'comments/form', commentable: answer
+      - else
+        p Sign in to comment answers
 
   = render 'votes/voting', votable: answer, vote: answer.vote_of(current_user)
 

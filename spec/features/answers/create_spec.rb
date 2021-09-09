@@ -50,4 +50,50 @@ feature 'User can create answer', %q{
     expect(page).to_not have_selector 'textarea'
     expect(page).to have_content 'Sign in to answer questions'
   end
+
+  describe 'Authenticated user answers a question and', js: true do
+    given(:other_question) { create(:question) }
+
+    scenario 'this answer appears in another user session' do
+      Capybara.using_session('guest') do
+        visit question_path(question)
+      end
+
+      Capybara.using_session('user') do
+        sign_in(user)
+
+        visit question_path(question)
+
+        fill_in 'Body', with: 'Testing answer creation'
+        click_on 'Answer'
+      end
+
+      Capybara.using_session('guest') do
+        within '.answers' do
+          expect(page).to have_content 'Testing answer creation'
+        end
+      end
+    end
+
+    scenario 'this answer does not appear on another question page' do
+      Capybara.using_session('guest') do
+        visit question_path(other_question)
+      end
+
+      Capybara.using_session('user') do
+        sign_in(user)
+
+        visit question_path(question)
+
+        fill_in 'Body', with: 'Testing answer creation'
+        click_on 'Answer'
+      end
+
+      Capybara.using_session('guest') do
+        within '.answers' do
+          expect(page).to_not have_content 'Testing answer creation'
+        end
+      end
+    end
+  end
 end

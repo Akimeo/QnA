@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
+  after_action :publish_answer, only: :create
 
   def create
     @answer = current_user.answers.new(answer_params)
@@ -33,5 +34,16 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:body, files: [], links_attributes: [:id, :name, :url, :_destroy])
+  end
+
+  def publish_answer
+    if answer.persisted?
+      answer_partial = ApplicationController.render(
+        partial: 'answers/sub_answer',
+        locals: { answer: answer }
+      )
+      data = { answer: answer_partial, user_id: current_user.id, question_author_id: answer.question.author.id }
+      AnswersChannel.broadcast_to(question, data)
+    end
   end
 end

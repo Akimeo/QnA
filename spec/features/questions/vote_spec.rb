@@ -17,7 +17,7 @@ feature 'User can vote for question', %q{
     end
 
     scenario 'upvotes a question' do
-      within '.question' do
+      within '.question-show' do
         click_on 'Upvote'
 
         expect(page).to have_content 'Rating: 1'
@@ -26,7 +26,7 @@ feature 'User can vote for question', %q{
     end
 
     scenario 'downvotes a question' do
-      within '.question' do
+      within '.question-show' do
         click_on 'Downvote'
 
         expect(page).to have_content 'Rating: -1'
@@ -45,14 +45,14 @@ feature 'User can vote for question', %q{
     end
 
     scenario 'tries to vote second time' do
-      within '.question' do
+      within '.question-show' do
         expect(page).to have_content 'Upvoted!'
         expect(page).not_to have_content 'Downvote'
       end
     end
 
     scenario 'cancels their vote and votes again' do
-      within '.question' do
+      within '.question-show' do
         click_on 'Cancel'
         click_on 'Downvote'
 
@@ -67,7 +67,7 @@ feature 'User can vote for question', %q{
 
     visit question_path(question)
 
-    within '.question' do
+    within '.question-show' do
       expect(page).not_to have_content 'Upvote'
       expect(page).not_to have_content 'Downvote'
     end
@@ -76,7 +76,7 @@ feature 'User can vote for question', %q{
   scenario 'Unauthenticated user tries to vote for a question' do
     visit question_path(question)
 
-    within '.question' do
+    within '.question-show' do
       expect(page).not_to have_content 'Upvote'
       expect(page).not_to have_content 'Downvote'
     end
