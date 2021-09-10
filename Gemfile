@@ -34,6 +34,7 @@ gem 'cocoon'
 gem 'validate_url'
 gem 'active_storage_validations'
 gem 'gon'
+gem 'cancancan'
 
 
 group :development, :test do

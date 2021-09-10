@@ -23,7 +23,7 @@
     = render question.comments
   .new-comment
     h3 New comment
-    - if user_signed_in?
+    - if can?(:create, Comment)
       = render 'comments/form', commentable: question
     - else
       p Sign in to comment questions
@@ -36,7 +36,7 @@
 
 .new-answer
   h2 New answer
-  - if user_signed_in?
+  - if can?(:create, Answer)
     = render 'answers/form', answer: answer, model: [question, answer]
   - else
     p Sign in to answer questions

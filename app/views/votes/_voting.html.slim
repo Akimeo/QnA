@@ -2,12 +2,11 @@
   .rating
     p= "Rating: #{votable.rating}"
 
-  - if user_signed_in? && !current_user.author_of?(votable)
-    .vote-links
-      - if vote
-        p= vote.upvote? ? 'Upvoted!' : 'Downvoted!'
-        p= link_to 'Cancel', vote_path(vote), method: :delete, class: 'cancel-vote-link', data: { type: :json }, remote: true
-      - else
-        = vote_link 'Upvote', :upvote, votable
-        br
-        = vote_link 'Downvote', :downvote, votable
+  .vote-links
+    - if can?(:create_vote, votable)
+      = vote_link 'Upvote', :upvote, votable
+      br
+      = vote_link 'Downvote', :downvote, votable
+    - if can?(:destroy, vote)
+      p= vote.upvote? ? 'Upvoted!' : 'Downvoted!'
+      p= link_to 'Cancel', vote_path(vote), method: :delete, class: 'cancel-vote-link', data: { type: :json }, remote: true      

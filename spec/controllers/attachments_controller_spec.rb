@@ -29,8 +29,8 @@ describe AttachmentsController, type: :controller do
         expect(question.reload.files).to be_attached
       end
 
-      it 'renders destroy view' do
-        expect(response).to render_template :destroy
+      it 'redirects to root url' do
+        expect(response).to redirect_to root_url
       end
     end
   end

@@ -28,10 +28,10 @@ describe LinksController, type: :controller do
         expect { delete_destroy }.to_not change(Link, :count)
       end
 
-      it 'renders destroy view' do
+      it 'redirects to root url' do
         delete_destroy
 
-        expect(response).to render_template :destroy
+        expect(response).to redirect_to root_url
       end
     end
   end

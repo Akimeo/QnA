@@ -4,5 +4,5 @@ div id="link-#{link.id}"
   - if link.gist?
     = javascript_include_tag "#{link.url}.js"
 
-  - if current_user&.author_of?(link.linkable)
+  - if can?(:destroy, link)
     = link_to 'Delete link', link_path(link), method: :delete, remote: true

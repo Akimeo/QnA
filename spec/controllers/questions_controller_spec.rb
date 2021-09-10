@@ -137,10 +137,10 @@ describe QuestionsController, type: :controller do
         expect(question.body).to_not eq 'new body'
       end
 
-      it 'renders update view' do
+      it 'redirects to root url' do
          patch_update
 
-         expect(response).to render_template :update
+         expect(response).to redirect_to root_url
       end
     end
   end
@@ -170,9 +170,10 @@ describe QuestionsController, type: :controller do
         expect { delete_destroy }.to_not change(Question, :count)
       end
 
-      it 'redirects to index' do
+      it 'redirects to root url' do
         delete_destroy
-        expect(response).to redirect_to questions_path
+
+        expect(response).to redirect_to root_url
       end
     end
   end
@@ -220,10 +221,10 @@ describe QuestionsController, type: :controller do
         expect(question.best_answer).to eq nil
       end
 
-      it "renders choose best answer view" do
+      it "redirects to root url" do
         patch_choose_best_answer
 
-        expect(response).to render_template :choose_best_answer
+        expect(response).to redirect_to root_url
       end
     end
   end

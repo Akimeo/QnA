@@ -2,6 +2,8 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: %i[index show]
   after_action :publish_question, only: :create
 
+  load_and_authorize_resource
+
   def index
     @questions = Question.all
   end
@@ -27,29 +29,21 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if current_user.author_of?(question)
-      question.update(question_params)
-    end
+    question.update(question_params)
   end
 
   def destroy
-    if current_user.author_of?(question)
-      question.destroy
-      flash[:notice] = 'Your question was successfully deleted.'
-    else
-      flash[:alert] = 'You must be the author to delete the question.'
-    end
+    question.destroy
+    flash[:notice] = 'Your question was successfully deleted.'
 
     redirect_to questions_path
   end
 
   def choose_best_answer
-    if current_user.author_of?(question)
-      @previous_best_answer = question.best_answer
-      question.transaction do
-        question.update!(best_answer: answer)
-        question.award&.update!(user: answer.author)
-      end
+    @previous_best_answer = question.best_answer
+    question.transaction do
+      question.update!(best_answer: answer)
+      question.award&.update!(user: answer.author)
     end
   end
 

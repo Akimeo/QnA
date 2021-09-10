@@ -93,10 +93,10 @@ describe AnswersController, type: :controller do
         expect(answer.body).to_not eq 'new body'
       end
 
-      it 'renders update view' do
+      it 'redirects to root url' do
          patch_update
 
-         expect(response).to render_template :update
+         expect(response).to redirect_to root_url
       end
     end
   end
@@ -125,10 +125,10 @@ describe AnswersController, type: :controller do
         expect { delete_destroy }.to_not change(Answer, :count)
       end
 
-      it 'renders destroy view' do
+      it 'redirects to root url' do
         delete_destroy
 
-        expect(response).to render_template :destroy
+        expect(response).to redirect_to root_url
       end
     end
   end
