@@ -25,7 +25,7 @@ class Ability
 
     can :create, [Question, Answer, Comment]
     can :create_vote, [Question, Answer] do |votable|
-      votable.author_id != user.id && !votable.votes.find_by(author: user)
+      !user.author_of?(votable) && !votable.vote_of(user)
     end
 
     can :update, [Question, Answer], author_id: user.id
@@ -34,6 +34,6 @@ class Ability
     can :destroy, ActiveStorage::Attachment, record: { author_id: user.id }
     can :destroy, Link, linkable: { author_id: user.id }
 
-    can :choose_best_answer, Question, author_id: user.id    
+    can :choose_best_answer, Question, author_id: user.id
   end
 end
