@@ -35,6 +35,9 @@ gem 'validate_url'
 gem 'active_storage_validations'
 gem 'gon'
 gem 'cancancan'
+gem 'doorkeeper'
+gem 'active_model_serializers', '~> 0.10'
+gem 'oj'
 
 
 group :development, :test do

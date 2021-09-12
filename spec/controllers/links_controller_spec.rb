@@ -28,10 +28,10 @@ describe LinksController, type: :controller do
         expect { delete_destroy }.to_not change(Link, :count)
       end
 
-      it 'redirects to root url' do
+      it 'returns forbidden status' do
         delete_destroy
 
-        expect(response).to redirect_to root_url
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end

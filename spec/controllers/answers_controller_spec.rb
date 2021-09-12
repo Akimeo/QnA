@@ -93,10 +93,10 @@ describe AnswersController, type: :controller do
         expect(answer.body).to_not eq 'new body'
       end
 
-      it 'redirects to root url' do
-         patch_update
+      it 'returns forbidden status' do
+        patch_update
 
-         expect(response).to redirect_to root_url
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -125,10 +125,10 @@ describe AnswersController, type: :controller do
         expect { delete_destroy }.to_not change(Answer, :count)
       end
 
-      it 'redirects to root url' do
+      it 'returns forbidden status' do
         delete_destroy
 
-        expect(response).to redirect_to root_url
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end

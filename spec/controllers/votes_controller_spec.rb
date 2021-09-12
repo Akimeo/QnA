@@ -56,10 +56,10 @@ describe VotesController, type: :controller do
         expect { post_create }.to_not change(Vote, :count)
       end
 
-      it 'redirects to root url' do
+      it 'returns forbidden status' do
         post_create
 
-        expect(response).to redirect_to root_url
+        expect(response).to have_http_status(:forbidden)
       end
     end
 
@@ -71,10 +71,10 @@ describe VotesController, type: :controller do
         expect { post_create }.to_not change(Vote, :count)
       end
 
-      it 'redirects to root url' do
+      it 'returns forbidden status' do
         post_create
 
-        expect(response).to redirect_to root_url
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -106,10 +106,10 @@ describe VotesController, type: :controller do
         expect { delete_destroy }.to_not change(Vote, :count)
       end
 
-      it 'redirects to root url' do
+      it 'returns forbidden status' do
         delete_destroy
 
-        expect(response).to redirect_to root_url
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end

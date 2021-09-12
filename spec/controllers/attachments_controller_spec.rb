@@ -29,8 +29,10 @@ describe AttachmentsController, type: :controller do
         expect(question.reload.files).to be_attached
       end
 
-      it 'redirects to root url' do
-        expect(response).to redirect_to root_url
+      it 'returns forbidden status' do
+        delete_destroy
+
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
