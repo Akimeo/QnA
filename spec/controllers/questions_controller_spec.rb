@@ -137,10 +137,10 @@ describe QuestionsController, type: :controller do
         expect(question.body).to_not eq 'new body'
       end
 
-      it 'redirects to root url' do
-         patch_update
+      it 'returns forbidden status' do
+        patch_update
 
-         expect(response).to redirect_to root_url
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
@@ -221,10 +221,10 @@ describe QuestionsController, type: :controller do
         expect(question.best_answer).to eq nil
       end
 
-      it "redirects to root url" do
+      it 'returns forbidden status' do
         patch_choose_best_answer
 
-        expect(response).to redirect_to root_url
+        expect(response).to have_http_status(:forbidden)
       end
     end
   end
