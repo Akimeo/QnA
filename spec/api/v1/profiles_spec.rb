@@ -9,7 +9,7 @@ describe 'Profiles API', type: :request do
       let(:method) { :get }
     end
 
-    context 'authorized' do
+    context 'when authorized' do
       let(:me) { create(:user) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
 
@@ -56,7 +56,7 @@ describe 'Profiles API', type: :request do
       let(:method) { :get }
     end
 
-    context 'authorized' do
+    context 'when authorized' do
       let(:me) { create(:user) }
       let(:access_token) { create(:access_token, resource_owner_id: me.id) }
       let(:response_user) { json['user'] }
