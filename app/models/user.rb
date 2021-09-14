@@ -10,6 +10,7 @@ class User < ApplicationRecord
   has_many :awards, dependent: :nullify
   has_many :votes, foreign_key: :author_id, dependent: :destroy
   has_many :comments, foreign_key: :author_id, dependent: :destroy
+  has_many :subscriptions, dependent: :destroy
 
   def author_of?(resource)
     id == resource.author_id

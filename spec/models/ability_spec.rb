@@ -22,12 +22,15 @@ describe Ability do
     let(:link) { create(:link, linkable: question) }
     let(:voted_question) { create(:question) }
     let!(:vote) { create(:vote, author: user, votable: voted_question) }
+    let(:subscribed_question) { create(:question) }
+    let!(:subscription) { create(:subscription, user: user, question: subscribed_question) }
 
     let(:other_question) { create(:question) }
     let(:other_answer) { create(:answer) }
     let(:other_question_with_file) { create(:question, files: [fixture_file_upload('spec/rails_helper.rb')]) }
     let(:other_link) { create(:link) }
     let(:other_vote) { create(:vote) }
+    let(:other_subscription) { create(:subscription) }
 
     it { should be_able_to :read, :all }
     it { should_not be_able_to :manage, :all }
@@ -41,6 +44,9 @@ describe Ability do
     it { should be_able_to :create_vote, other_question }
     it { should_not be_able_to :create_vote, question }
     it { should_not be_able_to :create_vote, voted_question }
+
+    it { should be_able_to :create_subscription, other_question }
+    it { should_not be_able_to :create_subscription, subscribed_question }
 
     it { should be_able_to :update, question }
     it { should_not be_able_to :update, other_question }
@@ -62,6 +68,9 @@ describe Ability do
 
     it { should be_able_to :destroy, vote }
     it { should_not be_able_to :destroy, other_vote }
+
+    it { should be_able_to :destroy, subscription }
+    it { should_not be_able_to :destroy, other_subscription }
 
     it { should be_able_to :choose_best_answer, question }
     it { should_not be_able_to :choose_best_answer, other_question }

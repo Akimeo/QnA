@@ -29,12 +29,16 @@ class Ability
     can :create_vote, [Question, Answer] do |votable|
       !user.author_of?(votable) && !votable.vote_of(user)
     end
+    can :create_subscription, Question do |question|
+      !question.subscription_of(user)
+    end
 
     can :update, [Question, Answer], author_id: user.id
 
     can :destroy, [Question, Answer, Vote], author_id: user.id
     can :destroy, ActiveStorage::Attachment, record: { author_id: user.id }
     can :destroy, Link, linkable: { author_id: user.id }
+    can :destroy, Subscription, user_id: user.id
 
     can :choose_best_answer, Question, author_id: user.id
   end

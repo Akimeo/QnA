@@ -18,6 +18,9 @@
       h3= "Recieve #{question.award.title} award for the best answer!"
       = image_tag question.award.image, size:"100x100"
 
+  .subscribing
+    = render 'subscriptions/subscribing', question: question, subscription: question.subscription_of(current_user)
+
   h3 Comments
   .comments
     = render question.comments
