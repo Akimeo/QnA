@@ -1,5 +1,5 @@
 describe DailyDigestJob, type: :job do
-  let(:service) { double('DailyDigestService') }
+  let(:service) { instance_double('DailyDigestService') }
 
   before { allow(DailyDigestService).to receive(:new).and_return(service) }
 

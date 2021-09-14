@@ -1,5 +1,5 @@
 describe QuestionUpdatesJob, type: :job do
-  let(:service) { double('QuestionUpdatesService') }
+  let(:service) { instance_double('QuestionUpdatesService') }
   let(:answer) { create(:answer) }
 
   before { allow(QuestionUpdatesService).to receive(:new).and_return(service) }
