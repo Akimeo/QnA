@@ -14,6 +14,7 @@ class Answer < ApplicationRecord
   validates :body, presence: true
 
   before_destroy :nullify_best, if: :best?
+  after_create :send_update
 
   def best?
     id == question.best_answer_id
@@ -23,5 +24,9 @@ class Answer < ApplicationRecord
 
   def nullify_best
     question.update(best_answer: nil)
+  end
+
+  def send_update
+    QuestionUpdatesJob.perform_later(self)
   end
 end

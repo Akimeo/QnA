@@ -1,0 +1,6 @@
+- if can?(:create_subscription, question)
+  p Receive notification letters when new answers appear
+  = button_to 'Subscribe', subscriptions_path(question_id: question), method: :post, remote: true
+- if can?(:destroy, subscription)
+  p You are subscribed to this question updates
+  = button_to 'Unsubscribe', subscription_path(subscription), method: :delete, remote: true

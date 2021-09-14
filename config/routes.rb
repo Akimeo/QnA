@@ -1,3 +1,5 @@
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   use_doorkeeper
   devise_for :users
@@ -28,6 +30,10 @@ Rails.application.routes.draw do
   resources :awards, only: :index
   resources :votes, only: %i[create destroy]
   resources :comments, only: :create
+  resources :subscriptions, only: %i[create destroy]
 
   mount ActionCable.server => '/cable'
+  authenticate :user, lambda { |user| user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end
